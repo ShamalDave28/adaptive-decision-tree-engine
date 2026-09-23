@@ -1,0 +1,20 @@
+# Python bytecode & cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual Environments
+venv/
+env/
+.venv/
+
+# Environment Variables & Secrets
+.env
+
+# Pyvis auto-generated visual files
+frontend/tree_graph.html
+tree_graph.html
+
+# Operating System files
+.DS_Store
+Thumbs.db

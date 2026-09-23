@@ -1,0 +1,56 @@
+{
+    "question": "Does it live in water?",
+    "guess": null,
+    "yes": {
+        "question": "Is it a mammal?",
+        "guess": null,
+        "yes": {
+            "question": null,
+            "guess": "Dolphin",
+            "yes": null,
+            "no": null
+        },
+        "no": {
+            "question": null,
+            "guess": "Shark",
+            "yes": null,
+            "no": null
+        }
+    },
+    "no": {
+        "question": "Is it a pet?",
+        "guess": null,
+        "yes": {
+            "question": "Does it meow?",
+            "guess": null,
+            "yes": {
+                "question": null,
+                "guess": "Cat",
+                "yes": null,
+                "no": null
+            },
+            "no": {
+                "question": null,
+                "guess": "Dog",
+                "yes": null,
+                "no": null
+            }
+        },
+        "no": {
+            "question": "Does it have black stripes?",
+            "guess": null,
+            "yes": {
+                "question": null,
+                "guess": "Tiger",
+                "yes": null,
+                "no": null
+            },
+            "no": {
+                "question": null,
+                "guess": "Lion",
+                "yes": null,
+                "no": null
+            }
+        }
+    }
+}
