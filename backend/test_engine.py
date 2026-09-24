@@ -1,12 +1,35 @@
 import pytest
-from backend.app.tree_manager import DecisionTreeEngine
+from unittest.mock import patch
+from backend.app.tree_manager import TreeManager, build_default_tree, tree_to_dict
 from backend.app.nlp_validator import validate_question, validate_target_entity
 
-def test_engine_initialization():
-    engine = DecisionTreeEngine()
-    root = engine.get_current_question()
+def test_default_tree_structure():
+    root = build_default_tree()
     assert root is not None
-    assert "text" in root
+    assert root.question == "Does it live in water?"
+    assert root.yes is not None
+    assert root.no is not None
+
+def test_tree_to_dict_conversion():
+    root = build_default_tree()
+    tree_dict = tree_to_dict(root)
+    assert isinstance(tree_dict, dict)
+    assert tree_dict["question"] == "Does it live in water?"
+    assert "yes" in tree_dict
+    assert "no" in tree_dict
+
+@patch("backend.app.database.DatabaseManager.load_tree_data", return_value=None)
+def test_tree_manager_initialization(mock_load):
+    manager = TreeManager()
+    assert manager.root is not None
+    assert manager.root.question == "Does it live in water?"
+
+@patch("backend.app.database.DatabaseManager.load_tree_data", return_value=None)
+def test_tree_navigation(mock_load):
+    manager = TreeManager()
+    # Step down: live in water (yes) -> mammal (yes) -> Dolphin
+    target_node = manager.navigate(["yes", "yes"])
+    assert target_node.guess == "Dolphin"
 
 def test_nlp_validation_valid():
     is_valid, msg = validate_question("Does it bark?")
