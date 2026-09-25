@@ -4,7 +4,8 @@ from pyvis.network import Network
 import streamlit.components.v1 as components
 import os
 
-API_URL = "http://localhost:8000/api"
+BACKEND_BASE = os.getenv("BACKEND_URL", "http://localhost:8000").rstrip("/")
+API_URL = f"{BACKEND_BASE}/api"
 
 st.set_page_config(
     page_title="AI Animal Guessing Game",
