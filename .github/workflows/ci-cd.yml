@@ -42,11 +42,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Downcase Repository Name
-        id: repo_name
-        run: |
-          echo "REPO_LOWER=\({GITHUB_REPOSITORY,,}" >>\)GITHUB_ENV
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -58,16 +53,34 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Extract Backend Metadata
+        id: meta_backend
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}/backend
+          tags: |
+            type=raw,value=latest
+
       - name: Build and Push Backend Image
         uses: docker/build-push-action@v5
         with:
           context: ./backend
           push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-          tags: ghcr.io/${{ env.REPO_LOWER }}/backend:latest
+          tags: ${{ steps.meta_backend.outputs.tags }}
+          labels: ${{ steps.meta_backend.outputs.labels }}
+
+      - name: Extract Frontend Metadata
+        id: meta_frontend
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}/frontend
+          tags: |
+            type=raw,value=latest
 
       - name: Build and Push Frontend Image
         uses: docker/build-push-action@v5
         with:
           context: ./frontend
           push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-          tags: ghcr.io/${{ env.REPO_LOWER }}/frontend:latest
+          tags: ${{ steps.meta_frontend.outputs.tags }}
+          labels: ${{ steps.meta_frontend.outputs.labels }}
